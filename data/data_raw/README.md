@@ -1,6 +1,8 @@
 # Data Source
-The dataset used in this project is from Kaggle.  
-![Source](https://www.kaggle.com/datasets/yogape/logistics-operations-database/data)  
+
+The dataset used in this project is from Kaggle:  
+[Logistics Operations Database – Kaggle Dataset](https://www.kaggle.com/datasets/yogape/logistics-operations-database/data)  
+
 
 The raw data files are not included in this repository due to file size limits.
 
