@@ -160,3 +160,176 @@ One row = one route between two cities.
 
 ---
 
+## Table: `loads`
+
+**Description:**  
+This table contains shipment-level financial and operational details for customer freight movements. Each row represents one load (shipment).
+
+**Grain:**  
+One row = one load.
+
+---
+
+## Columns
+
+| Column Name        | Data Type | Description                                               | Example          | Notes                          |
+|-------------------|-----------|-----------------------------------------------------------|-----------------|--------------------------------|
+| `load_id`          | String    | Unique identifier for each shipment                       | LOAD00000001    | Primary key                    |
+| `customer_id`      | String    | Identifier of the customer moving the freight            | CUST00183       | Foreign key to `customers`     |
+| `route_id`         | String    | Route assigned to the shipment                            | RTE00019        | Foreign key to `routes`        |
+| `load_date`        | Date      | Date the load was scheduled                               | 2022-01-01      | —                              |
+| `load_type`        | String    | Equipment type required                                   | Dry Van         | e.g., Dry Van, Refrigerated    |
+| `weight_lbs`       | Integer   | Total shipment weight in pounds                           | 19178           | —                              |
+| `pieces`           | Integer   | Number of freight pieces                                   | 13              | —                              |
+| `revenue`          | Decimal   | Linehaul revenue earned                                   | 3045.23         | Excludes surcharges            |
+| `fuel_surcharge`   | Decimal   | Fuel surcharge revenue                                     | 406.72          | —                              |
+| `accessorial_charges` | Decimal | Additional fees (e.g., liftgate, detention)              | 100             | —                              |
+| `load_status`      | String    | Current status of the shipment                             | Completed       | e.g., Completed, In Transit    |
+| `booking_type`     | String    | Type of booking                                           | Spot            | e.g., Spot, Contract, Dedicated|
+
+---
+
+## Table: `trips`
+
+**Description:**  
+This table contains detailed operational trip information for each load, including vehicles, drivers, distances, and durations.
+
+**Grain:**  
+One row = one trip for a load.
+
+---
+
+## Columns
+
+| Column Name               | Data Type | Description                                               | Example          | Notes                          |
+|----------------------------|-----------|-----------------------------------------------------------|-----------------|--------------------------------|
+| `trip_id`                  | String    | Unique identifier for each trip                            | TRIP00000001    | Primary key                    |
+| `load_id`                  | String    | Identifier of the associated load                          | LOAD00000001    | Foreign key to `loads`         |
+| `driver_id`                | String    | Driver assigned to the trip                                | DRV00117        | Foreign key to `drivers`       |
+| `truck_id`                 | String    | Truck assigned to the trip                                  | TRK00035        | Foreign key to `trucks`        |
+| `trailer_id`               | String    | Trailer assigned to the trip                                | TRL00167        | Foreign key to `trailers`      |
+| `dispatch_date`            | Date      | Date trip was dispatched                                    | 2022-01-01      | —                              |
+| `actual_distance_miles`    | Integer   | Distance actually traveled in miles                         | 1314            | —                              |
+| `actual_duration_hours`    | Decimal   | Duration of the trip in hours                                | 26.2            | —                              |
+| `fuel_gallons_used`        | Decimal   | Fuel used for the trip                                       | 183.8           | —                              |
+| `average_mpg`              | Decimal   | Average fuel efficiency                                     | 7.15            | Calculated as distance / fuel  |
+| `idle_time_hours`          | Decimal   | Total idle time during trip                                  | 3.5             | —                              |
+| `trip_status`              | String    | Current status of the trip                                    | Completed       | e.g., Completed, In Progress   |
+
+---
+
+## Table: `fuel_purchases`
+
+**Description:**  
+This table tracks all fuel purchases for trips, including quantities, cost, and location.
+
+**Grain:**  
+One row = one fuel purchase.
+
+---
+
+## Columns
+
+| Column Name          | Data Type | Description                                           | Example         | Notes                          |
+|---------------------|-----------|-------------------------------------------------------|----------------|--------------------------------|
+| `fuel_purchase_id`   | String    | Unique identifier for each fuel purchase             | FUEL00000001   | Primary key                    |
+| `trip_id`            | String    | Trip associated with the fuel purchase               | TRIP00051284   | Foreign key to `trips`         |
+| `truck_id`           | String    | Truck used for the fuel purchase                      | TRK00045       | Foreign key to `trucks`        |
+| `driver_id`          | String    | Driver making the purchase                             | DRV00102       | Foreign key to `drivers`       |
+| `purchase_date`      | Datetime  | Date and time of the fuel purchase                     | 2023-10-22 5:00:00 | —                          |
+| `location_city`      | String    | City where fuel was purchased                           | Columbus       | —                              |
+| `location_state`     | String    | State of fuel purchase location                        | MN             | Two-letter code                |
+| `gallons`            | Decimal   | Number of gallons purchased                             | 131.6          | —                              |
+| `price_per_gallon`   | Decimal   | Price per gallon paid                                    | 3.399          | —                              |
+| `total_cost`         | Decimal   | Total cost of purchase                                   | 447.31         | —                              |
+| `fuel_card_number`   | String    | Fuel card used                                          | FC567161       | —                              |
+
+---
+
+## Table: `maintenance_records`
+
+**Description:**  
+This table logs maintenance activities for trucks, including cost, labor, parts, and downtime.
+
+**Grain:**  
+One row = one maintenance event for a truck.
+
+---
+
+## Columns
+
+| Column Name           | Data Type | Description                                         | Example       | Notes                          |
+|----------------------|-----------|-----------------------------------------------------|---------------|--------------------------------|
+| `maintenance_id`      | String    | Unique identifier for each maintenance event       | MAINT00000001 | Primary key                    |
+| `truck_id`            | String    | Truck undergoing maintenance                        | TRK00085      | Foreign key to `trucks`        |
+| `maintenance_date`    | Date      | Date maintenance occurred                            | 2022-01-01    | —                              |
+| `maintenance_type`    | String    | Type of maintenance performed                        | Inspection    | e.g., Inspection, Repair       |
+| `odometer_reading`    | Integer   | Truck mileage at time of maintenance                 | 400255        | —                              |
+| `labor_hours`         | Decimal   | Labor hours spent                                     | 7.8           | —                              |
+| `labor_cost`          | Decimal   | Cost of labor                                        | 781.42        | —                              |
+| `parts_cost`          | Decimal   | Cost of parts used                                   | 10.41         | —                              |
+| `total_cost`          | Decimal   | Total maintenance cost                                | 791.83        | labor + parts                  |
+| `facility_location`   | String    | Facility where maintenance occurred                  | Kansas City   | —                              |
+| `downtime_hours`      | Decimal   | Time truck was unavailable due to maintenance        | 22.2          | —                              |
+| `service_description` | String    | Short description of the service performed          | Emergency Inspection | —                    |
+
+---
+
+## Table: `delivery_events`
+
+**Description:**  
+This table captures pickup and delivery events for each trip, including scheduled and actual times, locations, and delays.
+
+**Grain:**  
+One row = one delivery event (pickup or delivery) for a trip.
+
+---
+
+## Columns
+
+| Column Name           | Data Type | Description                                         | Example         | Notes                          |
+|-----------------------|-----------|-----------------------------------------------------|----------------|--------------------------------|
+| `event_id`            | String    | Unique identifier for each event                    | EVT00000001    | Primary key                    |
+| `load_id`             | String    | Associated load                                     | LOAD00000001   | Foreign key to `loads`         |
+| `trip_id`             | String    | Associated trip                                     | TRIP00000001   | Foreign key to `trips`         |
+| `event_type`          | String    | Type of event                                       | Pickup         | Pickup or Delivery             |
+| `facility_id`         | String    | Facility associated with the event                  | FAC00034       | Foreign key to `facilities`    |
+| `scheduled_datetime`  | Datetime  | Scheduled date and time for the event               | 2022-01-01 18:00:00 | —                     |
+| `actual_datetime`     | Datetime  | Actual date and time the event occurred             | 2022-01-01 20:58:56 | —                     |
+| `detention_minutes`   | Integer   | Delay duration in minutes                            | 0              | —                              |
+| `on_time_flag`        | Boolean   | Indicator if event was on time                       | FALSE          | TRUE = on time                 |
+| `location_city`       | String    | City where event occurred                             | Houston        | —                              |
+| `location_state`      | String    | State where event occurred                            | TX             | Two-letter code                |
+
+---
+
+## Table: `safety_incidents`
+
+**Description:**  
+This table records safety and compliance incidents related to trips, trucks, and drivers.
+
+**Grain:**  
+One row = one incident.
+
+---
+
+## Columns
+
+| Column Name             | Data Type | Description                                        | Example         | Notes                          |
+|-------------------------|-----------|----------------------------------------------------|----------------|--------------------------------|
+| `incident_id`           | String    | Unique identifier for the incident                | INC00000001    | Primary key                    |
+| `trip_id`               | String    | Trip associated with the incident                 | TRIP00036079   | Foreign key to `trips`         |
+| `truck_id`              | String    | Truck involved in the incident                     | TRK00006       | Foreign key to `trucks`        |
+| `driver_id`             | String    | Driver involved in the incident                    | DRV00006       | Foreign key to `drivers`       |
+| `incident_date`         | Datetime  | Date and time of the incident                      | 2023-04-09 14:00:00 | —                         |
+| `incident_type`         | String    | Type of incident                                   | Moving Violation | e.g., Accident, DOT Violation |
+| `location_city`         | String    | City where the incident occurred                   | Columbus        | —                              |
+| `location_state`        | String    | State of the incident location                     | PA              | Two-letter code                |
+| `at_fault_flag`         | Boolean   | Indicates if the driver was at fault               | TRUE            | —                              |
+| `injury_flag`           | Boolean   | Indicates if there were injuries                   | FALSE           | —                              |
+| `vehicle_damage_cost`   | Decimal   | Cost of vehicle damage                              | 12629.26        | —                              |
+| `cargo_damage_cost`     | Decimal   | Cost of cargo damage                                | 0               | —                              |
+| `claim_amount`          | Decimal   | Total claim amount filed                             | 12629.26        | —                              |
+| `preventable_flag`      | Boolean   | Indicates if incident was preventable              | TRUE            | —                              |
+| `description`           | String    | Short description of the incident                  | Severe incident involving equipment | — |
+
