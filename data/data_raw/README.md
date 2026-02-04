@@ -3,6 +3,8 @@
 The dataset used in this project is from Kaggle:  
 [Logistics Operations Database – Kaggle Dataset](https://www.kaggle.com/datasets/yogape/logistics-operations-database/data)  
 
+Credits to: Yogape Rodriguez (2025)  
+Synthetic Logistics Operations Database (2022-2024)  
 
 The raw data files are not included in this repository due to file size limits.
 
