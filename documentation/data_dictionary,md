@@ -1,0 +1,162 @@
+# Dataset Documentation
+
+## Table: `drivers`
+
+**Description:**  
+This table contains demographic, licensing, and employment information about company drivers. Each row represents one driver.
+
+**Grain:**  
+One row = one driver.
+
+---
+
+## Columns
+
+| Column Name        | Data Type        | Description                                             | Example        | Notes |
+|--------------------|------------------|---------------------------------------------------------|---------------|------|
+| `driver_id`        | String           | Unique identifier assigned to each driver              | DRV00001      | Primary key for this table |
+| `first_name`       | String           | Driver’s first name                                    | Jennifer      | — |
+| `last_name`        | String           | Driver’s last name                                     | Hernandez     | — |
+| `hire_date`        | Date             | Date the driver was hired by the company               | 2014-10-31    | Used to calculate tenure |
+| `termination_date` | Date (nullable)  | Date employment ended, if applicable                   | 2021-05-17    | Blank if driver is still employed |
+| `license_number`   | String           | Driver’s license number                                | DL673510887   | Potentially sensitive (PII) |
+| `license_state`    | String           | State where the license was issued                     | WA            | US state abbreviation |
+| `date_of_birth`    | Date             | Driver’s birth date                                    | 1973-11-07    | Can be used to calculate age |
+| `home_terminal`    | String           | Primary terminal/location assigned to the driver       | Denver        | Operational location |
+| `employment_status`| String           | Current employment state                               | Active        | Expected values: Active, Terminated |
+| `cdl_class`        | String           | Commercial Driver’s License class                      | A             | Indicates vehicle qualification level |
+| `years_experience` | Integer          | Years of professional driving experience               | 3             | May include experience before hire |
+
+---
+
+## Table: `trucks`
+
+**Description:**  
+This table contains identification, technical specifications, and operational status information for company trucks. Each row represents one truck.
+
+**Grain:**  
+One row = one truck.
+
+---
+
+## Columns
+
+| Column Name               | Data Type | Description                                              | Example             | Notes |
+|---------------------------|----------|----------------------------------------------------------|---------------------|------|
+| `truck_id`                | String   | Unique identifier assigned to each truck                 | TRK00001            | Primary key for this table |
+| `unit_number`             | Integer  | Internal fleet unit number                               | 3463                | Operational tracking ID |
+| `make`                    | String   | Truck manufacturer                                       | Peterbilt           | — |
+| `model_year`              | Integer  | Year the truck model was manufactured                    | 2016                | Used to assess vehicle age |
+| `vin`                     | String   | Vehicle Identification Number                            | 1VV205190335317039   | Unique vehicle identifier (PII-sensitive asset data) |
+| `acquisition_date`        | Date     | Date the truck was acquired by the company               | 2017-04-27          | Used for lifecycle analysis |
+| `acquisition_mileage`     | Integer  | Mileage on the truck at time of acquisition              | 18814               | Baseline mileage |
+| `fuel_type`               | String   | Type of fuel used by the truck                           | Diesel              | — |
+| `tank_capacity_gallons`   | Integer  | Maximum fuel tank capacity in gallons                    | 200                 | Impacts route range |
+| `status`                  | String   | Current operational status of the truck                  | Active              | Example values: Active, Maintenance |
+| `home_terminal`           | String   | Primary terminal/location assigned to the truck          | Omaha               | Operational base |
+
+---
+
+## Table: `trailers`
+
+**Description:**  
+This table contains identification, specifications, and operational status details for company trailers. Each row represents one trailer.
+
+**Grain:**  
+One row = one trailer.
+
+---
+
+## Columns
+
+| Column Name          | Data Type | Description                                             | Example             | Notes |
+|----------------------|----------|---------------------------------------------------------|---------------------|------|
+| `trailer_id`         | String   | Unique identifier assigned to each trailer              | TRL00001            | Primary key for this table |
+| `trailer_number`     | Integer  | Internal fleet number used to identify the trailer      | 4290                | Operational tracking ID |
+| `trailer_type`       | String   | Type of trailer based on cargo capability               | Refrigerated        | Example values: Dry Van, Refrigerated |
+| `length_feet`        | Integer  | Length of the trailer in feet                           | 53                  | Standard trailer size indicator |
+| `model_year`         | Integer  | Year the trailer model was manufactured                 | 2016                | Used to assess equipment age |
+| `vin`                | String   | Vehicle Identification Number for the trailer           | 1AV889081755621178   | Unique equipment identifier |
+| `acquisition_date`   | Date     | Date the trailer was acquired by the company            | 2018-05-11          | Used for lifecycle tracking |
+| `status`             | String   | Current operational status of the trailer               | Active              | May include statuses like Active, Maintenance, Retired |
+| `current_location`   | String   | Current terminal or city where the trailer is located   | Kansas City         | Operational positioning data |
+
+---
+
+## Table: `customers`
+
+**Description:**  
+This table contains account, contract, and revenue information for company customers. Each row represents one customer account.
+
+**Grain:**  
+One row = one customer.
+
+---
+
+## Columns
+
+| Column Name                | Data Type | Description                                                      | Example            | Notes |
+|----------------------------|----------|------------------------------------------------------------------|--------------------|------|
+| `customer_id`              | String   | Unique identifier assigned to each customer                      | CUST00001          | Primary key for this table |
+| `customer_name`            | String   | Official business name of the customer                           | Metro Wholesale    | — |
+| `customer_type`            | String   | Type of business relationship                                    | Dedicated          | Example values: Dedicated, Contract, Spot |
+| `credit_terms_days`        | Integer  | Number of days allowed for invoice payment                       | 60                 | Financial agreement term |
+| `primary_freight_type`     | String   | Main category of goods transported for the customer              | General            | Example values: Retail, Automotive, Food/Beverage, Electronics |
+| `account_status`           | String   | Current status of the customer account                           | Active             | Example values: Active, Inactive |
+| `contract_start_date`      | Date     | Date the customer contract or relationship began                 | 2020-02-20         | Used for tenure analysis |
+| `annual_revenue_potential` | Integer  | Estimated annual revenue value of the customer account           | 985117             | Financial planning metric |
+
+---
+
+## Table: `facilities`
+
+**Description:**  
+This table contains location, capacity, and operational information for company facilities. Each row represents one facility.
+
+**Grain:**  
+One row = one facility.
+
+---
+
+## Columns
+
+| Column Name        | Data Type | Description                                                     | Example                          | Notes |
+|--------------------|----------|-----------------------------------------------------------------|----------------------------------|------|
+| `facility_id`      | String   | Unique identifier assigned to each facility                     | FAC00001                         | Primary key for this table |
+| `facility_name`    | String   | Official name of the facility                                   | Houston Distribution Center      | — |
+| `facility_type`    | String   | Type of logistics facility                                      | Cross-Dock                       | Example values: Distribution Center, Warehouse, Terminal, Cross-Dock |
+| `city`             | String   | City where the facility is located                              | Houston                          | — |
+| `state`            | String   | US state abbreviation of the facility location                  | TX                               | Two-letter state code |
+| `latitude`         | Decimal  | Geographic latitude of the facility                             | 29.7604                          | Used for mapping and routing analysis |
+| `longitude`        | Decimal  | Geographic longitude of the facility                            | -95.3698                         | Used for mapping and routing analysis |
+| `dock_doors`       | Integer  | Number of loading/unloading dock doors at the facility          | 125                              | Capacity indicator |
+| `operating_hours`  | String   | Standard operating hours of the facility                        | 24/7                             | May include ranges such as 8AM-5PM |
+
+---
+
+## Table: `routes`
+
+**Description:**  
+This table contains standard route, distance, and pricing information for common transportation lanes. Each row represents one origin–destination route.
+
+**Grain:**  
+One row = one route between two cities.
+
+---
+
+## Columns
+
+| Column Name               | Data Type | Description                                                      | Example        | Notes |
+|---------------------------|----------|------------------------------------------------------------------|----------------|------|
+| `route_id`                | String   | Unique identifier assigned to each route                         | RTE00001       | Primary key for this table |
+| `origin_city`             | String   | City where the route begins                                      | Atlanta        | — |
+| `origin_state`            | String   | US state abbreviation of the origin location                     | GA             | Two-letter state code |
+| `destination_city`        | String   | City where the route ends                                        | Chicago        | — |
+| `destination_state`       | String   | US state abbreviation of the destination location                 | IL             | Two-letter state code |
+| `typical_distance_miles`  | Integer  | Standard distance between origin and destination in miles        | 677            | Used for planning and cost calculations |
+| `base_rate_per_mile`      | Decimal  | Standard base transportation rate charged per mile               | 1.70           | Pricing metric |
+| `fuel_surcharge_rate`     | Decimal  | Additional rate per mile to account for fuel cost fluctuations   | 0.19           | Variable cost component |
+| `typical_transit_days`    | Integer  | Expected number of days to complete the route                    | 1              | Service level indicator |
+
+---
+
